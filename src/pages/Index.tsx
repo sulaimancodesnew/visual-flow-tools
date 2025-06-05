@@ -3,6 +3,9 @@ import React, { useState } from 'react';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
 import ToolsGrid from '@/components/ToolsGrid';
+import FeaturesSection from '@/components/FeaturesSection';
+import StatsSection from '@/components/StatsSection';
+import TestimonialsSection from '@/components/TestimonialsSection';
 import ToolInterface from '@/components/ToolInterface';
 
 const Index = () => {
@@ -23,7 +26,7 @@ const Index = () => {
 
   if (selectedTool) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
         <Header onMenuClick={toggleMenu} isMenuOpen={isMenuOpen} />
         <ToolInterface toolId={selectedTool} onBack={handleBackToTools} />
       </div>
@@ -31,10 +34,13 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-b from-background via-muted/20 to-background">
       <Header onMenuClick={toggleMenu} isMenuOpen={isMenuOpen} />
       <HeroSection />
+      <StatsSection />
       <ToolsGrid onToolSelect={handleToolSelect} />
+      <FeaturesSection />
+      <TestimonialsSection />
     </div>
   );
 };

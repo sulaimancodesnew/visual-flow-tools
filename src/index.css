@@ -14,7 +14,7 @@
     --popover: 255 255 255;
     --popover-foreground: 15 23 42;
 
-    --primary: 6 182 212;
+    --primary: 14 165 233;
     --primary-foreground: 255 255 255;
 
     --secondary: 241 245 249;
@@ -23,7 +23,7 @@
     --muted: 248 250 252;
     --muted-foreground: 100 116 139;
 
-    --accent: 20 184 166;
+    --accent: 16 185 129;
     --accent-foreground: 255 255 255;
 
     --destructive: 239 68 68;
@@ -31,18 +31,18 @@
 
     --border: 226 232 240;
     --input: 226 232 240;
-    --ring: 6 182 212;
+    --ring: 14 165 233;
 
     --radius: 0.75rem;
 
     --sidebar-background: 255 255 255;
     --sidebar-foreground: 15 23 42;
-    --sidebar-primary: 6 182 212;
+    --sidebar-primary: 14 165 233;
     --sidebar-primary-foreground: 255 255 255;
     --sidebar-accent: 241 245 249;
     --sidebar-accent-foreground: 15 23 42;
     --sidebar-border: 226 232 240;
-    --sidebar-ring: 6 182 212;
+    --sidebar-ring: 14 165 233;
   }
 
   .dark {
@@ -55,7 +55,7 @@
     --popover: 2 6 23;
     --popover-foreground: 248 250 252;
 
-    --primary: 34 211 238;
+    --primary: 56 189 248;
     --primary-foreground: 2 6 23;
 
     --secondary: 30 41 59;
@@ -64,7 +64,7 @@
     --muted: 15 23 42;
     --muted-foreground: 148 163 184;
 
-    --accent: 45 212 191;
+    --accent: 52 211 153;
     --accent-foreground: 2 6 23;
 
     --destructive: 220 38 38;
@@ -72,16 +72,16 @@
 
     --border: 30 41 59;
     --input: 30 41 59;
-    --ring: 34 211 238;
+    --ring: 56 189 248;
 
     --sidebar-background: 2 6 23;
     --sidebar-foreground: 248 250 252;
-    --sidebar-primary: 34 211 238;
+    --sidebar-primary: 56 189 248;
     --sidebar-primary-foreground: 2 6 23;
     --sidebar-accent: 30 41 59;
     --sidebar-accent-foreground: 248 250 252;
     --sidebar-border: 30 41 59;
-    --sidebar-ring: 34 211 238;
+    --sidebar-ring: 56 189 248;
   }
 }
 
@@ -98,14 +98,32 @@
 
 @layer components {
   .gradient-bg {
-    @apply bg-gradient-to-br from-ocean-50 via-mint-50 to-cyan-50;
+    @apply bg-gradient-to-br from-electric-50 via-neon-50 to-purple-50;
   }
   
   .gradient-text {
-    @apply bg-gradient-to-r from-ocean-600 to-mint-600 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-electric-600 via-neon-500 to-purple-600 bg-clip-text text-transparent;
   }
 
   .glass-card {
     @apply bg-white/80 backdrop-blur-sm border border-white/20 shadow-xl;
+  }
+
+  .hero-gradient {
+    @apply bg-gradient-to-br from-electric-500 via-neon-400 to-purple-500;
+  }
+
+  .tool-gradient {
+    @apply bg-gradient-to-r from-electric-500/10 to-neon-500/10 hover:from-electric-500/20 hover:to-neon-500/20;
+  }
+
+  .btn-gradient {
+    @apply bg-gradient-to-r from-electric-500 to-neon-500 hover:from-electric-600 hover:to-neon-600;
+  }
+
+  .animated-gradient {
+    background: linear-gradient(-45deg, #0ea5e9, #10b981, #a855f7, #f97316);
+    background-size: 400% 400%;
+    animation: gradient-x 15s ease infinite;
   }
 }

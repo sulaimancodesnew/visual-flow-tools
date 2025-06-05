@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, Download } from 'lucide-react';
+import { ArrowLeft, Download, Cloud } from 'lucide-react';
 import ImageUpload from './ImageUpload';
 import { toast } from '@/hooks/use-toast';
 
@@ -65,8 +65,10 @@ const toolData = {
 
 const ToolInterface: React.FC<ToolInterfaceProps> = ({ toolId, onBack }) => {
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [cloudImageUrl, setCloudImageUrl] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [processedImage, setProcessedImage] = useState<string | null>(null);
+  const [enableCloudStorage, setEnableCloudStorage] = useState(false);
 
   const tool = toolData[toolId as keyof typeof toolData];
 
@@ -83,11 +85,14 @@ const ToolInterface: React.FC<ToolInterfaceProps> = ({ toolId, onBack }) => {
     );
   }
 
-  const handleImageUpload = (file: File) => {
+  const handleImageUpload = (file: File, cloudUrl?: string) => {
     const reader = new FileReader();
     reader.onload = (e) => {
       setUploadedImage(e.target?.result as string);
       setProcessedImage(null);
+      if (cloudUrl) {
+        setCloudImageUrl(cloudUrl);
+      }
     };
     reader.readAsDataURL(file);
   };
@@ -113,7 +118,7 @@ const ToolInterface: React.FC<ToolInterfaceProps> = ({ toolId, onBack }) => {
     
     const link = document.createElement('a');
     link.href = processedImage;
-    link.download = `processed-image-${Date.now()}.png`;
+    link.download = `lock-the-day-${toolId}-${Date.now()}.png`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -127,33 +132,48 @@ const ToolInterface: React.FC<ToolInterfaceProps> = ({ toolId, onBack }) => {
   const clearImage = () => {
     setUploadedImage(null);
     setProcessedImage(null);
+    setCloudImageUrl(null);
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
       <div className="container px-4 py-8">
         <div className="flex items-center gap-4 mb-8">
-          <Button variant="outline" onClick={onBack}>
+          <Button variant="outline" onClick={onBack} className="hover:bg-gradient-to-r hover:from-electric-500 hover:to-neon-500 hover:text-white transition-all duration-300">
             <ArrowLeft size={16} className="mr-2" />
             Back to Tools
           </Button>
           <div className="flex items-center gap-3">
             <span className="text-2xl">{tool.icon}</span>
             <div>
-              <h1 className="text-2xl font-bold">{tool.title}</h1>
+              <h1 className="text-2xl font-bold gradient-text">{tool.title}</h1>
               <p className="text-muted-foreground">{tool.description}</p>
             </div>
-            <Badge variant="secondary">{tool.category}</Badge>
+            <Badge variant="secondary" className="bg-gradient-to-r from-electric-100 to-neon-100 text-electric-800">
+              {tool.category}
+            </Badge>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div className="space-y-6">
-            <Card>
+            <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-muted/30">
               <CardHeader>
-                <CardTitle>Upload Image</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  Upload Image
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setEnableCloudStorage(!enableCloudStorage)}
+                    className={enableCloudStorage ? 'bg-gradient-to-r from-electric-500 to-neon-500 text-white' : ''}
+                  >
+                    <Cloud size={16} className="mr-1" />
+                    {enableCloudStorage ? 'Cloud ON' : 'Cloud OFF'}
+                  </Button>
+                </CardTitle>
                 <CardDescription>
                   Select an image to get started with {tool.title.toLowerCase()}
+                  {enableCloudStorage && ' (will be saved to cloud)'}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -161,12 +181,13 @@ const ToolInterface: React.FC<ToolInterfaceProps> = ({ toolId, onBack }) => {
                   onImageUpload={handleImageUpload}
                   currentImage={uploadedImage}
                   onClearImage={clearImage}
+                  enableCloudStorage={enableCloudStorage}
                 />
               </CardContent>
             </Card>
 
             {uploadedImage && (
-              <Card>
+              <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-muted/30">
                 <CardHeader>
                   <CardTitle>Processing Options</CardTitle>
                   <CardDescription>
@@ -178,11 +199,16 @@ const ToolInterface: React.FC<ToolInterfaceProps> = ({ toolId, onBack }) => {
                     <Button 
                       onClick={handleProcessImage}
                       disabled={isProcessing}
-                      className="bg-gradient-to-r from-ocean-500 to-mint-500 hover:from-ocean-600 hover:to-mint-600"
+                      className="btn-gradient text-white hover:scale-105 transition-all duration-300"
                     >
                       {isProcessing ? 'Processing...' : `Apply ${tool.title}`}
                     </Button>
                   </div>
+                  {cloudImageUrl && (
+                    <div className="text-xs text-center text-electric-600">
+                      ✓ Image saved to cloud storage
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             )}
@@ -190,24 +216,24 @@ const ToolInterface: React.FC<ToolInterfaceProps> = ({ toolId, onBack }) => {
 
           <div className="space-y-6">
             {processedImage && (
-              <Card>
+              <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-muted/30">
                 <CardHeader>
-                  <CardTitle>Processed Result</CardTitle>
+                  <CardTitle className="gradient-text">Processed Result</CardTitle>
                   <CardDescription>
                     Your image has been processed successfully
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="relative">
+                  <div className="relative group">
                     <img 
                       src={processedImage} 
                       alt="Processed result" 
-                      className="w-full max-h-96 object-contain rounded-lg border"
+                      className="w-full max-h-96 object-contain rounded-lg border group-hover:shadow-lg transition-shadow duration-300"
                     />
                   </div>
                   <Button 
                     onClick={handleDownload}
-                    className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600"
+                    className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white hover:scale-105 transition-all duration-300"
                   >
                     <Download size={16} className="mr-2" />
                     Download Processed Image
@@ -217,9 +243,9 @@ const ToolInterface: React.FC<ToolInterfaceProps> = ({ toolId, onBack }) => {
             )}
 
             {!processedImage && uploadedImage && (
-              <Card className="border-dashed">
+              <Card className="border-dashed border-2 border-electric-300 bg-gradient-to-br from-electric-50/50 to-neon-50/50">
                 <CardContent className="p-8 text-center text-muted-foreground">
-                  <div className="text-4xl mb-4">⏳</div>
+                  <div className="text-4xl mb-4 animate-float">⏳</div>
                   <p>Your processed image will appear here</p>
                 </CardContent>
               </Card>

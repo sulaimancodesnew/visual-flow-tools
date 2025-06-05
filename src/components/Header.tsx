@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Lock } from 'lucide-react';
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -22,10 +22,10 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick, isMenuOpen }) => {
             {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </Button>
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-ocean-500 to-mint-500 flex items-center justify-center">
-              <span className="text-white font-bold text-sm">N</span>
+            <div className="w-8 h-8 rounded-lg animated-gradient flex items-center justify-center">
+              <Lock className="text-white w-4 h-4" />
             </div>
-            <h1 className="text-xl font-bold gradient-text">NextImageTools</h1>
+            <h1 className="text-xl font-bold gradient-text">Lock The Day</h1>
           </div>
         </div>
         
@@ -34,17 +34,20 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick, isMenuOpen }) => {
             Tools
           </Button>
           <Button variant="ghost" size="sm">
-            About
+            Gallery
           </Button>
           <Button variant="ghost" size="sm">
-            Help
+            Pricing
           </Button>
-          <Button size="sm" className="bg-gradient-to-r from-ocean-500 to-mint-500 hover:from-ocean-600 hover:to-mint-600">
+          <Button variant="ghost" size="sm">
+            About
+          </Button>
+          <Button size="sm" className="btn-gradient text-white">
             Get Started
           </Button>
         </nav>
 
-        <Button size="sm" className="md:hidden bg-gradient-to-r from-ocean-500 to-mint-500 hover:from-ocean-600 hover:to-mint-600">
+        <Button size="sm" className="md:hidden btn-gradient text-white">
           Get Started
         </Button>
       </div>
